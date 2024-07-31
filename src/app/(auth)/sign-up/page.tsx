@@ -173,12 +173,15 @@ const SignUpPage = () => {
           </Form>
         </div>
         <div className="text-center mt-4">
-          <Link
-            href='/sign-in'
-            className="text-blue-500 hover:text-blue-800"
-          >
-            Sign In
-          </Link>
+          <p>
+            Already a member? { ' ' }
+            <Link
+              href='/sign-in'
+              className="text-blue-500 hover:text-blue-800"
+            >
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
     </div>
