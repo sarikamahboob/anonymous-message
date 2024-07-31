@@ -6,7 +6,8 @@ import { getServerSession, User } from "next-auth";
 export async function POST(request: Request) {
   await dbConnect()
 
-  const session = getServerSession(authOptions)
+  const session = await getServerSession(authOptions)
+  console.log({session})
   //@ts-ignore
   const user: User = session?.user as User
   //@ts-ignore
@@ -70,7 +71,8 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   await dbConnect()
 
-  const session = getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
+
   //@ts-ignore
   const user: User = session?.user as User
   //@ts-ignore

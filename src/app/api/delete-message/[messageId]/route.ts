@@ -7,7 +7,7 @@ export async function DELETE(request: Request, {params}: {params: {messageId: st
   const messageId = params.messageId
   await dbConnect()
 
-  const session = getServerSession(authOptions)
+  const session = await getServerSession(authOptions)
   //@ts-ignore
   const user: User = session?.user as User
   //@ts-ignore

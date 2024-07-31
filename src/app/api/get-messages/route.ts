@@ -7,7 +7,7 @@ import { getServerSession, User } from "next-auth";
 export async function GET(request: Request) {
   await dbConnect()
 
-  const session = getServerSession(authOptions)
+  const session = await getServerSession(authOptions)
   //@ts-ignore
   const user: User = session?.user as User
   //@ts-ignore
@@ -26,12 +26,21 @@ export async function GET(request: Request) {
   const userId = new mongoose.Types.ObjectId(user._id)
 
   try {
-    const user = await UserModel.aggregate([
-      { $match: {id: userId} },
-      { $unwind: '$messages' },
-      { $sort: {'messages.createdAt': -1}},
-      { $group: {_id: '$_id', messages: {$push: '$messages' }}}
-    ])
+    const user = await UserModel
+      .aggregate([
+        { $match: { _id: userId } },
+        {
+          $unwind: {
+            path: "$message",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $sort: { "message.createdAt": -1 },
+        },
+        { $group: { _id: "$_id", message: { $push: "$message" } } },
+      ])
+      .exec();
 
     if(!user || user.length === 0){
       return Response.json(

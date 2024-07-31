@@ -36,9 +36,9 @@ const SignInPage = () => {
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     setIsSubmitting(true)
     const result = await signIn('credentials', {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password
+      redirect : false,
+      identifier : data.identifier,
+      password : data.password
     })
     if(result?.error) {
       if(result.error === 'CredentialsSignin') {
@@ -49,6 +49,7 @@ const SignInPage = () => {
         })
         setIsSubmitting(false)
       } else {
+        console.log({result})
         toast({
           title: 'Login Failed',
           description: result.error,
@@ -58,8 +59,9 @@ const SignInPage = () => {
       }
     } 
     setIsSubmitting(false)
+
     if(result?.url) {
-      router.replace('/dashboard')
+      router.replace('/dashboard/')
     }
   }
 
@@ -134,7 +136,7 @@ const SignInPage = () => {
               href='/sign-up'
               className="text-blue-500 hover:text-blue-800"
             >
-              Sign In
+              Sign Up
             </Link>
           </p>
         </div>
