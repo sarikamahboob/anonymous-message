@@ -5,10 +5,11 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { User } from 'next-auth'
 import { Button } from '../ui/button'
+import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
   const {data: session} = useSession()
-
+  const router = usePathname()
   const user: User = session?.user as User
 
   return (
@@ -21,11 +22,15 @@ const Navbar = () => {
               <span className='mr-4'>
                 Welcome, {user?.username || user?.email}
               </span>
-              <Link href={'/dashboard'} className='mr-4'>
-                <Button className='w-full md:w-auto' >
-                  Dashboard
-                </Button>
-              </Link>
+              {
+                router === '/' && (
+                  <Link href={'/dashboard'} className='mr-4'>
+                    <Button className='w-full md:w-auto' >
+                      Dashboard
+                    </Button>
+                  </Link>
+                )
+              }
               <Button className='w-full md:w-auto' onClick={() => signOut()}>Log Out</Button>
             </div>
           ) : (
