@@ -28,50 +28,55 @@ import axios from "axios"
 
 type MessageCardProps = {
   message: Message;
-  onMessageDelete: (messageId: string) => void;
+  onMessageDelete: (messageId: string | unknown) => void;
 }
 
 const MessageCard = ({message, onMessageDelete}: MessageCardProps) => {
   const {toast} = useToast()
+  const date = new Date(message?.createdAt)
+  const formattedDate = date.toDateString()
+
   const handleDeleteConfirm = async () => {
     const response = await axios.delete<ApiResponse>(`/api/delete-message/${message?._id}`)
     toast({
       title: response?.data?.message,
       description: ""
     })
-    onMessageDelete(message._id)
+    onMessageDelete(message?._id)
   }
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive">
-              <X className="w-5 h-5"/>
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-        </>
-        <CardDescription>Card Description</CardDescription>
-      </CardHeader>
-      <CardContent>
-      </CardContent>
-    </Card>
+    <div>
+      <Card>
+        <CardHeader className="flex flex-row justify-between">
+          <CardTitle>{message?.content}</CardTitle>
+          <AlertDialog>
+            <AlertDialogTrigger asChild className="sticky">
+              <Button variant="destructive" className="w-10 h-10 p-2">
+                <X className="w-14 h-10" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your data.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteConfirm} >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </CardHeader>
+
+        <CardContent>{formattedDate}</CardContent>
+      </Card>
+    </div>
   )
 }
 

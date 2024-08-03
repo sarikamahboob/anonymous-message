@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: true,
-        message: "Message acceptance status updated updated successfully",
+        message: "Message acceptance status updated successfully",
         updatedUser
       },
       {
@@ -107,7 +107,7 @@ export async function GET(request: Request) {
     return Response.json(
       {
         success: true,
-        isAcceptingMessages: foundUser?.isAcceptingMessage
+        isAcceptingMessage: foundUser?.isAcceptingMessage
       },
       {
         status: 200

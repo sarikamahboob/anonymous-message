@@ -31,16 +31,16 @@ export async function GET(request: Request) {
         { $match: { _id: userId } },
         {
           $unwind: {
-            path: "$message",
+            path: "$messages",
             preserveNullAndEmptyArrays: true,
           },
         },
         {
           $sort: { "message.createdAt": -1 },
         },
-        { $group: { _id: "$_id", message: { $push: "$message" } } },
+        { $group: { _id: "$_id", message: { $push: "$messages" } } },
       ])
-      .exec();
+      // .exec();
 
     if(!user || user.length === 0){
       return Response.json(
@@ -57,7 +57,7 @@ export async function GET(request: Request) {
     return Response.json(
       {
         success: true,
-        message: user[0].messages,
+        message: user[0].message,
       },
       {
         status: 200
